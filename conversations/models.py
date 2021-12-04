@@ -57,3 +57,8 @@ class Chat(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     discount = models.ForeignKey(Discount, on_delete=models.CASCADE)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+
+
+class Schedule(models.Model):
+    sending_date = models.DateTimeField()
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
