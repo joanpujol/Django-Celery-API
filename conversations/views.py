@@ -1,3 +1,14 @@
-from django.shortcuts import render
+from rest_framework import generics
 
-# Create your views here.
+from . import models
+from . import serializers
+
+
+class ConversationView(generics.ListCreateAPIView):
+    queryset = models.Conversation.objects.all()
+    serializer_class = serializers.ConversationSerializer
+
+
+class ConversationElementView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Conversation.objects.all()
+    serializer_class = serializers.ConversationSerializer
