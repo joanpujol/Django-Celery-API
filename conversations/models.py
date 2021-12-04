@@ -27,3 +27,8 @@ class OperatorGroup(models.Model):
 class Operator(models.Model):
     user = models.CharField(max_length=20)
     operator_group = models.ForeignKey(OperatorGroup, on_delete=models.CASCADE)
+
+
+class Discount(models.Model):
+    discount_code = models.CharField(max_length=20)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
