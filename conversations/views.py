@@ -12,3 +12,13 @@ class ConversationView(generics.ListCreateAPIView):
 class ConversationElementView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Conversation.objects.all()
     serializer_class = serializers.ConversationSerializer
+
+
+class ChatView(generics.ListCreateAPIView):
+    queryset = models.Chat.objects.all()
+    serializer_class = serializers.ChatSerializer
+
+
+class ChatElementView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Chat.objects.all()
+    serializer_class = serializers.ChatSerializer
