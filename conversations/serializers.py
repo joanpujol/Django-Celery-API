@@ -4,7 +4,13 @@ from . import models
 
 
 class ChatSerializer(serializers.ModelSerializer):
-    conversation_id = serializers.IntegerField(source='conversation.id')
+    class Meta:
+        model = models.Chat
+        fields = "__all__"
+
+
+class ChatDetailSerializer(serializers.ModelSerializer):
+    conversation_id = serializers.IntegerField(source='conversation.id', read_only=True)
     status = serializers.SerializerMethodField('get_status_display')
 
     class Meta:
@@ -17,12 +23,18 @@ class ChatSerializer(serializers.ModelSerializer):
 
 
 class ConversationSerializer(serializers.ModelSerializer):
-    store_id = serializers.IntegerField(source='store.id')
-    operator_id = serializers.IntegerField(source='operator.id')
-    operator_group = serializers.CharField(source='operator.operator_group.name')
-    client_id = serializers.IntegerField(source='client.id')
+    class Meta:
+        model = models.Conversation
+        fields = "__all__"
+
+
+class ConversationDetailSerializer(serializers.ModelSerializer):
+    store_id = serializers.IntegerField(source='store.id', read_only=True)
+    operator_id = serializers.IntegerField(source='operator.id', read_only=True)
+    operator_group = serializers.CharField(source='operator.operator_group.name', read_only=True)
+    client_id = serializers.IntegerField(source='client.id', read_only=True)
     status = serializers.SerializerMethodField('get_status_display')
-    chats = ChatSerializer(many=True, read_only=True)
+    chats = ChatDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Conversation
