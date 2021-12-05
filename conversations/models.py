@@ -8,16 +8,6 @@ from . import validators
 TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
 
 
-class ConversationStatusChoices(models.IntegerChoices):
-    PENDING = 1
-    RESOLVED = 2
-
-
-class ChatStatusChoices(models.IntegerChoices):
-    NEW = 1
-    SENT = 2
-
-
 class Store(models.Model):
     name = models.CharField(max_length=20)
     timezone = models.CharField(max_length=32, choices=TIMEZONES, default='UTC')
@@ -60,13 +50,17 @@ class Discount(models.Model):
 
 
 class Conversation(models.Model):
+    class ConversationStatusChoices(models.IntegerChoices):
+        PENDING = 1, 'Pending'
+        RESOLVED = 2, 'Resolved'
+
     status = models.IntegerField(choices=ConversationStatusChoices.choices, default=ConversationStatusChoices.PENDING)
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     operator = models.ForeignKey(Operator, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.store} | {self.operator} => {self.client} | {self.status}"
+        return f"{self.store} | {self.operator} => {self.client} | {self.get_status_display()}"
 
 
 class ChatManager(models.Manager):
@@ -76,6 +70,10 @@ class ChatManager(models.Manager):
 
 
 class Chat(models.Model):
+    class ChatStatusChoices(models.IntegerChoices):
+        NEW = 1, 'New'
+        SENT = 2, 'Sent'
+
     objects = ChatManager()
     status = models.IntegerField(choices=ChatStatusChoices.choices, default=ChatStatusChoices.NEW)
     payload = models.CharField(max_length=300, validators=[validators.chat_validation])
@@ -84,7 +82,7 @@ class Chat(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.payload
+        return f"{self.payload} | {self.get_status_display()}"
 
 
 class Schedule(models.Model):
