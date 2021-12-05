@@ -125,3 +125,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MAX_MESSAGES_PER_HOUR = 90
+SENDING_INTERVAL_START = 9
+SENDING_INTERVAL_END = 20

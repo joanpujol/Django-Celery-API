@@ -1,7 +1,7 @@
 from django.db import models
-
 import pytz
 
+from . import scheduler
 from . import validators
 
 
@@ -51,7 +51,14 @@ class Conversation(models.Model):
     operator = models.ForeignKey(Operator, on_delete=models.CASCADE)
 
 
+class ChatManager(models.Manager):
+    def create(self, *args, **kwargs):
+        instance = super(ChatManager, self).create(*args, **kwargs)
+        scheduler.ChatScheduler(instance).schedule_dispatch()
+
+
 class Chat(models.Model):
+    objects = ChatManager()
     status = models.IntegerField(choices=ChatStatusChoices.choices, default=ChatStatusChoices.NEW)
     payload = models.CharField(max_length=300, validators=[validators.chat_validation])
     created_date = models.DateTimeField(auto_now_add=True)
