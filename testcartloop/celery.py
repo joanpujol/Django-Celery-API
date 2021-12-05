@@ -5,7 +5,7 @@ from celery import schedules
 
 DISPATCH_CHATS_TASK = "DISPATCH_CHATS_TASK"
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proj.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'testcartloop.settings')
 
 app = Celery('testcartloop')
 

@@ -131,4 +131,4 @@ SENDING_INTERVAL_START = 9
 SENDING_INTERVAL_END = 20
 
 # Celery settings
-CELERY_BROKER_URL = 'amqp://localhost:5672'
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'

@@ -21,5 +21,5 @@ def dispatch_chats():
     for chat in chats:
         chat.payload = render_payload(chat.payload, chat.conversation.operator, chat.conversation.client, chat.discount)
         # This is where we could send this message via email/SMS
-        chat.status = models.ChatStatusChoices.SENT
+        chat.status = models.Chat.ChatStatusChoices.SENT
         chat.save()

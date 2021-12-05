@@ -25,10 +25,11 @@ class ChatScheduler:
 
     def retrieve_current_timeslot_chats(self):
         """Retrieves current pending chats"""
-        return models.Schedule.objects.filter(
+        schedules = models.Schedule.objects.filter(
             sending_date__gte=self.current_utc_dt,
-            sending_date__lte=self.current_utc_dt + timedelta(hours=1)
-        ).only("chat")
+            sending_date__lt=self.current_utc_dt + timedelta(hours=1)
+        ).all()
+        return [schedule.chat for schedule in schedules]
 
     def _search_available_timeslot(self, client_tz, store_tz):
         """Looks for an hour with fewer messages than the limit and within min/max user or store interval"""
