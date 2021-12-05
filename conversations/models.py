@@ -51,8 +51,8 @@ class Discount(models.Model):
 
 class Conversation(models.Model):
     class ConversationStatusChoices(models.IntegerChoices):
-        PENDING = 1, 'Pending'
-        RESOLVED = 2, 'Resolved'
+        PENDING = 1, 'PENDING'
+        RESOLVED = 2, 'RESOLVED'
 
     status = models.IntegerField(choices=ConversationStatusChoices.choices, default=ConversationStatusChoices.PENDING)
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
@@ -72,8 +72,8 @@ class ChatManager(models.Manager):
 
 class Chat(models.Model):
     class ChatStatusChoices(models.IntegerChoices):
-        NEW = 1, 'New'
-        SENT = 2, 'Sent'
+        NEW = 1, 'NEW'
+        SENT = 2, 'SENT'
 
     objects = ChatManager()
     status = models.IntegerField(choices=ChatStatusChoices.choices, default=ChatStatusChoices.NEW)

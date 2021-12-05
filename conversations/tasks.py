@@ -19,7 +19,12 @@ def dispatch_chats():
         return template.render(context)
     chats = scheduler.ChatScheduler().retrieve_current_timeslot_chats()
     for chat in chats:
-        chat.payload = render_payload(chat.payload, chat.conversation.operator, chat.conversation.client, chat.discount)
-        # This is where we could send this message via email/SMS
+        rendered_payload = render_payload(
+            chat.payload,
+            chat.conversation.operator,
+            chat.conversation.client,
+            chat.discount
+        )
+        # This is where we could send this payload via email/SMS
         chat.status = models.Chat.ChatStatusChoices.SENT
         chat.save()
