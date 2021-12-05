@@ -9,7 +9,7 @@ class ConversationView(generics.ListCreateAPIView):
     serializer_class = serializers.ConversationSerializer
 
 
-class ConversationElementView(generics.RetrieveUpdateDestroyAPIView):
+class ConversationElementView(generics.RetrieveAPIView):
     queryset = models.Conversation.objects.all()
     serializer_class = serializers.ConversationSerializer
 
@@ -19,6 +19,6 @@ class ChatView(generics.ListCreateAPIView):
     serializer_class = serializers.ChatSerializer
 
 
-class ChatElementView(generics.RetrieveUpdateDestroyAPIView):
+class ChatElementView(generics.RetrieveAPIView):
     queryset = models.Chat.objects.all()
     serializer_class = serializers.ChatSerializer

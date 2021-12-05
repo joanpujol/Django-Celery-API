@@ -24,12 +24,14 @@ class ChatScheduler:
         models.Schedule.objects.create(sending_date=available_timeslot, chat=chat_instance)
 
     def retrieve_current_timeslot_chats(self):
+        """Retrieves current pending chats"""
         return models.Schedule.objects.filter(
             sending_date__gte=self.current_utc_dt,
             sending_date__lte=self.current_utc_dt + timedelta(hours=1)
         ).only("chat")
 
     def _search_available_timeslot(self, user_tz, store_tz):
+        """Looks for an hour with fewer messages than the limit and within min/max user or store interval"""
         start_hour = self.current_utc_dt
         end_hour = start_hour + timedelta(hours=1)
         messages_per_hour = max_messages_per_hour = self.MAX_MESSAGES_PER_HOUR

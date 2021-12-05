@@ -2,8 +2,7 @@ from django.core.validators import RegexValidator
 
 
 phone_validation = RegexValidator(
-        # TODO revise this regex
-        regex=r'^\d{9}$',
+        regex=r'^\+?(?:[0-9]?){6,14}$',  # Optionally can include country prefix (+34)
         message='Phone number must be entered in the format: 05999999999'
     )
 
