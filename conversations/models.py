@@ -67,6 +67,7 @@ class ChatManager(models.Manager):
     def create(self, *args, **kwargs):
         instance = super(ChatManager, self).create(*args, **kwargs)
         scheduler.ChatScheduler().schedule_dispatch(instance)
+        return instance
 
 
 class Chat(models.Model):
