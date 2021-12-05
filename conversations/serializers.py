@@ -10,7 +10,7 @@ class ChatSerializer(serializers.ModelSerializer):
 
 
 class ConversationSerializer(serializers.ModelSerializer):
-    chats = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    chats = ChatSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Conversation

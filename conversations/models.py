@@ -80,7 +80,7 @@ class Chat(models.Model):
     payload = models.CharField(max_length=300, validators=[validators.chat_validation])
     created_date = models.DateTimeField(auto_now_add=True)
     discount = models.ForeignKey(Discount, on_delete=models.CASCADE)
-    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='chats')
 
     def __str__(self):
         return f"{self.payload} | {self.get_status_display()}"
