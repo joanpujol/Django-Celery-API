@@ -13,7 +13,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
     'dispatch-chats-every-hour': {
         'task': DISPATCH_CHATS_TASK,
-        'schedule': schedules.crontab(minute=0, hour='*'),
+        'schedule': schedules.crontab(minute=0, hour='*'),  # Executes one time each hour
     },
 }
 app.conf.timezone = 'UTC'

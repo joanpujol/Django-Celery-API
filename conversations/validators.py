@@ -7,6 +7,6 @@ phone_validation = RegexValidator(
 )
 
 chat_validation = RegexValidator(
-    regex=r"^[a-zA-Z0-9 /{}\$%_-~@#%\^&\(\)!\?\\]*$",
+    regex=r"^[a-zA-Z0-9 /{}\$%_-~@#%\^&\(\)!\?\\\.]*$",
     message="Text contains invalid character"
 )
