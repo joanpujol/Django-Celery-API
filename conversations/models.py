@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 import pytz
 
@@ -18,12 +19,12 @@ class Store(models.Model):
 
 
 class Client(models.Model):
-    user = models.CharField(max_length=20)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     timezone = models.CharField(max_length=32, choices=TIMEZONES, default='UTC')
     phone = models.CharField(max_length=60, validators=[validators.phone_validation])
 
     def __str__(self):
-        return self.user
+        return self.user.get_full_name()
 
 
 class OperatorGroup(models.Model):
@@ -34,11 +35,11 @@ class OperatorGroup(models.Model):
 
 
 class Operator(models.Model):
-    user = models.CharField(max_length=20)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     operator_group = models.ForeignKey(OperatorGroup, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user
+        return self.user.get_full_name()
 
 
 class Discount(models.Model):
