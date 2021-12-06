@@ -11,6 +11,7 @@ from unittest.mock import MagicMock
 
 from . import models
 from . import scheduler
+from . import tasks
 
 
 class TestBase:
@@ -32,6 +33,16 @@ class TestBase:
             store=self.test_store,
             client=self.test_client,
             operator=self.test_operator
+        )
+        self.test_chat = models.Chat.objects.create(
+            status=models.Chat.ChatStatusChoices.NEW,
+            payload='This is a test message sent by the user {{ client.user.first_name }}',
+            discount=self.test_discount,
+            conversation=self.test_conversation
+        )
+        self.test_schedule = models.Schedule.objects.create(
+            sending_date=datetime.utcnow().replace(minute=0, second=0, microsecond=0, tzinfo=pytz.utc),
+            chat=self.test_chat
         )
 
 
@@ -70,16 +81,6 @@ class ChatSchedulerTestCase(TestBase, TestCase):
         super().setUp()
         self.client = Client()
         self.scheduler = scheduler.ChatScheduler()
-        self.test_chat = models.Chat.objects.create(
-            status=models.Chat.ChatStatusChoices.NEW,
-            payload='This is a test message sent by the user {{ client.user.first_name }}',
-            discount=self.test_discount,
-            conversation=self.test_conversation
-        )
-        self.test_schedule = models.Schedule.objects.create(
-            sending_date=datetime.utcnow().replace(minute=0, second=0, microsecond=0, tzinfo=pytz.utc),
-            chat=self.test_chat
-        )
 
     def test_datetime_in_timezone(self):
         current_utc_dt = self.scheduler.current_utc_dt
@@ -104,3 +105,14 @@ class ChatSchedulerTestCase(TestBase, TestCase):
     def test_retrieve_current_timeslot_chats(self):
         chats = self.scheduler.retrieve_current_timeslot_chats()
         self.assertEqual(chats[0], self.test_chat)
+
+
+class CeleryDispatchChatsTestCase(TestBase, TestCase):
+    def test_dispatch_chats_celery_task(self):
+        test_chat_id = self.test_chat.id
+        chat_status_choices = models.Chat.ChatStatusChoices
+        chat_before_task = models.Chat.objects.get(id=test_chat_id)
+        self.assertEqual(chat_before_task.status, chat_status_choices.NEW)
+        tasks.dispatch_chats()
+        chat_after_task = models.Chat.objects.get(id=test_chat_id)
+        self.assertEqual(chat_after_task.status, chat_status_choices.SENT)
