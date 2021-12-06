@@ -29,16 +29,17 @@ class ConversationSerializer(serializers.ModelSerializer):
 
 
 class ConversationDetailSerializer(serializers.ModelSerializer):
-    store_id = serializers.IntegerField(source='store.id', read_only=True)
-    operator_id = serializers.IntegerField(source='operator.id', read_only=True)
-    operator_group = serializers.CharField(source='operator.operator_group.name', read_only=True)
-    client_id = serializers.IntegerField(source='client.id', read_only=True)
+    store_id = serializers.IntegerField(source='store.id')
+    operator_id = serializers.IntegerField(source='operator.id')
+    operator_group = serializers.CharField(source='operator.operator_group.name')
+    client_id = serializers.IntegerField(source='client.id')
     status = serializers.SerializerMethodField('get_status_display')
-    chats = ChatDetailSerializer(many=True, read_only=True)
+    chats = ChatDetailSerializer(many=True)
 
     class Meta:
         model = models.Conversation
         fields = ('id', 'store_id', 'operator_id', 'operator_group', 'client_id', 'status', 'chats', )
+        read_only_fields = ('store_id', 'operator_id', 'operator_group', 'client_id', 'chats')
 
     @staticmethod
     def get_status_display(obj):
